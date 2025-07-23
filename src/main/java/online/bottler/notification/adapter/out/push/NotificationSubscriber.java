@@ -2,7 +2,7 @@ package online.bottler.notification.adapter.out.push;
 
 import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
-import online.bottler.global.exception.AdaptorException;
+import online.bottler.shared.exception.AdaptorException;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;

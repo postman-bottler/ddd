@@ -3,7 +3,7 @@ package online.bottler.notification.application;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import online.bottler.global.exception.AdaptorException;
+import online.bottler.shared.exception.AdaptorException;
 import online.bottler.notification.application.port.ListenerPort;
 import online.bottler.notification.application.port.SseEmitterPort;
 import org.springframework.stereotype.Component;

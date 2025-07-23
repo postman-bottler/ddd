@@ -1,53 +1,57 @@
 package online.bottler.letter.domain;
 
-import java.time.LocalDateTime;
-import lombok.Getter;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import online.bottler.shared.ddd.AggregateRoot;
 
-@Getter
-public class LetterBox extends BaseDomain {
+@Entity
+@AggregateRoot
+@Table(name = "letter_box",
+        indexes = @Index(name = "idx_letterbox_user_box_createdat", columnList = "requesterId, boxType, createdAt DESC"))
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class LetterBox extends AbstractAuditing {
 
-    private final Long userId;
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private final Long letterId;
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 
-    private final LetterBoxType letterBoxType;
+    @Column(name = "letter_id", nullable = false)
+    private Long letterId;
 
+    @Embedded
+    private LetterBoxType letterBoxType;
+
+    @Builder
     private LetterBox(
             Long id,
             Long userId,
             Long letterId,
-            LetterBoxType letterBoxType,
-            LocalDateTime createdAt
+            LetterBoxType letterBoxType
     ) {
-        super(id, createdAt);
-        this.letterId = letterId;
+        this.id = id;
         this.userId = userId;
+        this.letterId = letterId;
         this.letterBoxType = letterBoxType;
     }
 
-    public static LetterBox of(
-            Long id,
-            Long userId,
-            Long letterId,
-            LetterBoxType letterBoxType,
-            LocalDateTime createdAt
-    ) {
-        return new LetterBox(
-                id,
-                userId,
-                letterId,
-                letterBoxType,
-                createdAt
-        );
-    }
-
-    public static LetterBox create(Long userId, Long letterId, LetterBoxType letterBoxType) {
-        return new LetterBox(
-                null,
-                userId,
-                letterId,
-                letterBoxType,
-                null
-        );
+    public static LetterBox archive(Long userId, Long letterId, LetterBoxType letterBoxType) {
+        return LetterBox.builder()
+                .userId(userId).
+                letterId(letterId).
+                letterBoxType(letterBoxType)
+                .build();
     }
 }

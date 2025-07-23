@@ -10,7 +10,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import online.bottler.global.exception.ApplicationException;
+import online.bottler.shared.exception.ApplicationException;
 import online.bottler.user.application.port.in.KakaoUseCase;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;

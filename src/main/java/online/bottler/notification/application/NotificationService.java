@@ -76,12 +76,15 @@ public class NotificationService implements NotificationUseCase {
         return result;
     }
 
-    public void sendKeywordNotifications(List<RecommendNotificationCommand> requests) {
-        requests.forEach(request -> {
-            notificationPersistencePort.save(Notification.create(NotificationType.NEW_LETTER, request.userId(),
-                    request.letterId(), request.label()));
-        });
+    public void sendKeywordNotification(RecommendNotificationCommand request) {
+        notificationPersistencePort.save(
+                Notification.create(
+                        NotificationType.NEW_LETTER, request.userId(), request.letterId(), request.label()
+                )
+        );
+
         Subscriptions allSubscriptions = subscriptionPersistencePort.findAll();
+
         if (allSubscriptions.isPushEnabled()) {
             pushMessage(NotificationType.NEW_LETTER, allSubscriptions);
         }
@@ -91,5 +94,4 @@ public class NotificationService implements NotificationUseCase {
         PushMessages pushMessages = subscriptions.makeMessages(type);
 //        pushNotificationPort.pushAll(pushMessages);
     }
-
 }

@@ -6,11 +6,12 @@ import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import online.bottler.auth.CustomUserDetails;
-import online.bottler.global.exception.AdaptorException;
+import online.bottler.shared.exception.AdaptorException;
 import online.bottler.label.adapter.in.web.request.LabelRequest;
 import online.bottler.label.application.LabelFacade;
 import online.bottler.label.application.port.in.LabelUseCase;
 import online.bottler.label.application.response.LabelResponse;
+import online.bottler.shared.response.ApiResponse;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import online.bottler.global.response.ApiResponse;
 
 @RestController
 @RequiredArgsConstructor

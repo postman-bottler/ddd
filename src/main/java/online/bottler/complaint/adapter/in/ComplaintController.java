@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import online.bottler.auth.CustomUserDetails;
 import online.bottler.complaint.application.ComplaintFacade;
 import online.bottler.complaint.application.ComplaintResponse;
-import online.bottler.global.response.ApiResponse;
+import online.bottler.shared.response.ApiResponse;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;

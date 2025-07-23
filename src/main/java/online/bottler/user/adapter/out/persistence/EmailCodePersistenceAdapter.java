@@ -1,7 +1,7 @@
 package online.bottler.user.adapter.out.persistence;
 
 import lombok.RequiredArgsConstructor;
-import online.bottler.global.exception.AdaptorException;
+import online.bottler.shared.exception.AdaptorException;
 import online.bottler.user.adapter.out.persistence.entity.EmailCodeEntity;
 import online.bottler.user.adapter.out.persistence.repository.EmailCodeJpaRepository;
 import online.bottler.user.application.port.out.EmailCodePersistencePort;

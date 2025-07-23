@@ -1,7 +1,7 @@
 package online.bottler.letter.domain;
 
 import lombok.Getter;
-import online.bottler.letter.exception.InvalidSortFieldException;
+import online.bottler.letter.domain.exception.InvalidSortFieldException;
 
 @Getter
 public enum SortField {

@@ -1,7 +1,7 @@
 package online.bottler.notification.application;
 
 import lombok.RequiredArgsConstructor;
-import online.bottler.global.exception.ApplicationException;
+import online.bottler.shared.exception.ApplicationException;
 import online.bottler.notification.application.response.SubscriptionResponse;
 import online.bottler.notification.application.port.SubscriptionUseCase;
 import online.bottler.notification.application.port.SubscriptionPersistencePort;

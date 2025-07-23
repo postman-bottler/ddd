@@ -5,11 +5,11 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import online.bottler.auth.CustomUserDetails;
 import online.bottler.reply.application.port.in.ReplyUseCase;
+import online.bottler.shared.response.ApiResponse;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import online.bottler.global.response.ApiResponse;
 import online.bottler.reply.application.response.ReplyResponse;
 
 @RestController

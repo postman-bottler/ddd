@@ -3,7 +3,7 @@ package online.bottler.mapletter.application;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import online.bottler.global.exception.ApplicationException;
+import online.bottler.shared.exception.ApplicationException;
 import online.bottler.mapletter.application.command.CreatePublicMapLetterCommand;
 import online.bottler.mapletter.application.command.CreateTargetMapLetterCommand;
 import online.bottler.mapletter.application.command.DeleteMapLettersCommand;

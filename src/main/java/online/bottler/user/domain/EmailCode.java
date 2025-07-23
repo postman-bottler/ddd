@@ -2,7 +2,7 @@ package online.bottler.user.domain;
 
 import java.time.LocalDateTime;
 import lombok.Getter;
-import online.bottler.global.exception.DomainException;
+import online.bottler.shared.exception.DomainException;
 
 @Getter
 public class EmailCode {

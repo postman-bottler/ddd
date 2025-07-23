@@ -11,7 +11,7 @@ import online.bottler.complaint.application.port.MapReplyComplaintPersistencePor
 import online.bottler.complaint.domain.Complaint;
 import online.bottler.complaint.domain.ComplaintType;
 import online.bottler.complaint.domain.Complaints;
-import online.bottler.global.exception.ApplicationException;
+import online.bottler.shared.exception.ApplicationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

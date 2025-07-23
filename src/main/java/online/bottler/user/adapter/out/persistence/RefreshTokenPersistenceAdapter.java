@@ -2,7 +2,7 @@ package online.bottler.user.adapter.out.persistence;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import online.bottler.global.exception.AdaptorException;
+import online.bottler.shared.exception.AdaptorException;
 import online.bottler.user.adapter.out.persistence.entity.RefreshTokenEntity;
 import online.bottler.user.adapter.out.persistence.repository.RefreshTokenJpaRepository;
 import online.bottler.user.application.port.out.RefreshTokenPersistencePort;

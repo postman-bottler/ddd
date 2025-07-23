@@ -1,7 +1,7 @@
 package online.bottler.label.domain;
 
 import lombok.Getter;
-import online.bottler.global.exception.DomainException;
+import online.bottler.shared.exception.DomainException;
 import online.bottler.label.application.response.LabelResponse;
 
 @Getter

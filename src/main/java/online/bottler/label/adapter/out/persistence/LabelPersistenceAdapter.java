@@ -2,7 +2,7 @@ package online.bottler.label.adapter.out.persistence;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import online.bottler.global.exception.AdaptorException;
+import online.bottler.shared.exception.AdaptorException;
 import online.bottler.label.adapter.out.persistence.entity.LabelEntity;
 import online.bottler.label.adapter.out.persistence.entity.UserLabelEntity;
 import online.bottler.label.adapter.out.persistence.repository.LabelJpaRepository;

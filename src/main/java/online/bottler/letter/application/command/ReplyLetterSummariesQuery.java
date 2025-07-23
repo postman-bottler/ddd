@@ -1,7 +1,7 @@
 package online.bottler.letter.application.command;
 
-public record ReplyLetterSummariesQuery(Long userId, Long letterId, CommonPageCommand commonPageCommand) {
-    public static ReplyLetterSummariesQuery of(Long userId, Long letterId, CommonPageCommand commonPageCommand) {
-        return new ReplyLetterSummariesQuery(userId, letterId, commonPageCommand);
+public record ReplyLetterSummariesQuery(Long letterId, CommonPageCommand commonPageCommand) {
+    public static ReplyLetterSummariesQuery of(Long letterId, CommonPageCommand commonPageCommand) {
+        return new ReplyLetterSummariesQuery(letterId, commonPageCommand);
     }
 }

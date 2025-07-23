@@ -3,7 +3,7 @@ package online.bottler.mapletter.adaptor.out.persistence;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import online.bottler.global.exception.AdaptorException;
+import online.bottler.shared.exception.AdaptorException;
 import online.bottler.mapletter.adaptor.out.persistence.repository.ReplyMapLetterJpaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

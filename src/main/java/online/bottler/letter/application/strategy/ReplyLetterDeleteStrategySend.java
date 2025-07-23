@@ -4,37 +4,33 @@ import static online.bottler.letter.domain.LetterType.REPLY_LETTER;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import online.bottler.letter.application.port.in.LetterBoxUseCase;
-import online.bottler.letter.application.port.in.RecentReplyForLetterUseCase;
-import online.bottler.letter.application.port.in.ReplyLetterUseCase;
+import online.bottler.letter.application.command.RemoveLetterBoxCommand;
+import online.bottler.letter.application.service.RecentReplyForLetterService;
+import online.bottler.letter.application.service.LetterBoxService;
+import online.bottler.letter.application.service.ReplyLetterService;
 import online.bottler.letter.domain.LetterBoxType;
 import online.bottler.letter.domain.ReplyLetter;
-import online.bottler.letter.exception.LetterAuthorMismatchException;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class ReplyLetterDeleteStrategySend implements LetterDeleteStrategy {
 
-    private final RecentReplyForLetterUseCase recentReplyForLetterUseCase;
-    private final LetterBoxUseCase letterBoxUseCase;
-    private final ReplyLetterUseCase replyLetterUseCase;
+    private final RecentReplyForLetterService recentReplyForLetterService;
+    private final LetterBoxService letterBoxService;
+    private final ReplyLetterService replyLetterService;
 
     @Override
     public void deleteLetters(Long userId, List<Long> letterIds) {
-        List<ReplyLetter> replyLetters = replyLetterUseCase.getReplyLetters(letterIds);
-        validateReplyLetterOwnerShip(userId, replyLetters);
+        replyLetterService.removeReplyLetters(userId, letterIds);
 
-        replyLetters.forEach(replyLetter -> recentReplyForLetterUseCase.delete(replyLetter.getReceiverId(),
+        List<ReplyLetter> replyLetters = replyLetterService.getReplyLetters(letterIds);
+
+        replyLetters.forEach(replyLetter -> recentReplyForLetterService.delete(replyLetter.getReceiverId(),
                 replyLetter.getId(), replyLetter.getLabel()));
 
-        replyLetterUseCase.removeReplyLetters(letterIds);
-        letterBoxUseCase.removeLettersFromBox(letterIds, LetterBoxType.of(REPLY_LETTER, null));
-    }
-
-    private void validateReplyLetterOwnerShip(Long userId, List<ReplyLetter> replyLetters) {
-        if (replyLetters.stream().anyMatch(replyLetter -> !replyLetter.isOwner(userId))) {
-            throw new LetterAuthorMismatchException();
-        }
+        letterBoxService.removeLettersFromBox(
+                RemoveLetterBoxCommand.byLetterIds(letterIds, LetterBoxType.of(REPLY_LETTER, null))
+        );
     }
 }

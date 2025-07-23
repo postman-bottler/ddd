@@ -1,12 +1,10 @@
 package online.bottler.user.adapter.out.persistence;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import online.bottler.global.exception.AdaptorException;
+import online.bottler.shared.exception.AdaptorException;
 import online.bottler.user.adapter.out.persistence.entity.UserEntity;
 import online.bottler.user.adapter.out.persistence.repository.UserJpaRepository;
 import online.bottler.user.application.port.out.UserPersistencePort;

@@ -21,5 +21,5 @@ public interface NotificationUseCase {
 
     List<NotificationResponse> getUserNotifications(Long userId);
 
-    void sendKeywordNotifications(List<RecommendNotificationCommand> requests);
+    void sendKeywordNotification(RecommendNotificationCommand request);
 }
