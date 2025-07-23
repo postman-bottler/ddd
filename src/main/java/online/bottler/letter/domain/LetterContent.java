@@ -1,30 +1,54 @@
 package online.bottler.letter.domain;
 
-public record LetterContent(
-        String title,
-        String content,
-        String font,
-        String paper,
-        String label
-) {
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-    public static LetterContent of(
+@Getter
+@Embeddable
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class LetterContent {
+
+    @Column(name = "title", nullable = false)
+    private String title;
+
+    @Column(name = "content", nullable = false, columnDefinition = "TEXT")
+    private String content;
+
+    @Column(name = "font", nullable = false)
+    private String font;
+
+    @Column(name = "paper", nullable = false)
+    private String paper;
+
+    @Column(name = "label", nullable = false)
+    private String label;
+
+    @Builder(access = AccessLevel.PRIVATE)
+    private LetterContent(String title, String content, String font, String paper, String label) {
+        this.title = title;
+        this.content = content;
+        this.font = font;
+        this.paper = paper;
+        this.label = label;
+    }
+
+    public static LetterContent compose(
             String title,
             String content,
             String font,
             String paper,
             String label
     ) {
-        return new LetterContent(
-                validateTitle(title),
-                content,
-                font,
-                paper,
-                label
-        );
-    }
-
-    private static String validateTitle(String title) {
-        return (title == null || title.trim().isEmpty()) ? "무제" : title;
+        return LetterContent.builder()
+                .title(title)
+                .content(content)
+                .font(font)
+                .paper(paper)
+                .label(label)
+                .build();
     }
 }

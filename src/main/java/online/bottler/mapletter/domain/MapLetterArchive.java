@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import online.bottler.global.exception.CommonForbiddenException;
+import online.bottler.shared.exception.CommonForbiddenException;
 
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

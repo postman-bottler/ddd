@@ -3,7 +3,7 @@ package online.bottler.mapletter.adaptor.out.persistence;
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import online.bottler.global.exception.AdaptorException;
+import online.bottler.shared.exception.AdaptorException;
 import online.bottler.mapletter.adaptor.out.persistence.repository.MapLetterJpaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

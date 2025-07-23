@@ -14,7 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import online.bottler.global.exception.AdaptorException;
+import online.bottler.shared.exception.AdaptorException;
 import online.bottler.user.domain.Provider;
 import online.bottler.user.domain.Role;
 import online.bottler.user.domain.User;

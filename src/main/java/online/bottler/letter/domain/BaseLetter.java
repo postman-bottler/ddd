@@ -1,63 +1,50 @@
 package online.bottler.letter.domain;
 
-import java.time.LocalDateTime;
-import lombok.Getter;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.MappedSuperclass;
 
-@Getter
-abstract class BaseLetter extends BaseDomain {
+@MappedSuperclass
+abstract class BaseLetter extends AbstractAuditing {
 
-    private final LetterContent letterContent;
+    @Embedded
+    protected LetterContent letterContent;
 
-    private LetterStatus status;
-
-    BaseLetter(
-            Long id,
-            LetterContent letterContent,
-            LetterStatus status,
-            LocalDateTime created_at
-    ) {
-        super(id, created_at);
-        this.letterContent = letterContent;
-        this.status = status;
-    }
-
-    public void delete() {
-        this.status = LetterStatus.DELETED;
-    }
-
-    public void block() {
-        this.status = LetterStatus.BLOCKED;
-    }
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    protected LetterStatus status;
 
     public boolean isOpen() {
-        return status == LetterStatus.OPEN;
+        return status.isOpen();
     }
 
     public boolean isDeleted() {
-        return status == LetterStatus.DELETED;
+        return status.isDeleted();
     }
 
     public boolean isBlocked() {
-        return status == LetterStatus.BLOCKED;
+        return status.isBlocked();
     }
 
     public String getTitle() {
-        return letterContent.title();
+        return letterContent.getTitle();
     }
 
     public String getContent() {
-        return letterContent.content();
+        return letterContent.getContent();
     }
 
     public String getFont() {
-        return letterContent.font();
+        return letterContent.getFont();
     }
 
     public String getPaper() {
-        return letterContent.paper();
+        return letterContent.getPaper();
     }
 
     public String getLabel() {
-        return letterContent.label();
+        return letterContent.getLabel();
     }
 }

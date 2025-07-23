@@ -3,7 +3,7 @@ package online.bottler.user.application;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import online.bottler.global.exception.ApplicationException;
+import online.bottler.shared.exception.ApplicationException;
 import online.bottler.user.domain.Ban;
 import online.bottler.user.application.port.in.BanUseCase;
 import online.bottler.user.application.port.out.BanPersistencePort;

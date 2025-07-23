@@ -1,6 +1,6 @@
 package online.bottler.mapletter.application.validator;
 
-import online.bottler.global.exception.ApplicationException;
+import online.bottler.shared.exception.ApplicationException;
 
 public class PageValidator {
 

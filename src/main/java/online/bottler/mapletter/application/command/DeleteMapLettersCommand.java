@@ -2,7 +2,7 @@ package online.bottler.mapletter.application.command;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.List;
-import online.bottler.global.exception.ApplicationException;
+import online.bottler.shared.exception.ApplicationException;
 
 public record DeleteMapLettersCommand(
         List<LetterInfo> letters

@@ -9,9 +9,9 @@ import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import online.bottler.label.application.port.in.LabelUseCase;
 import online.bottler.label.domain.Label;
-import online.bottler.letter.application.port.in.LetterBoxUseCase;
-import online.bottler.letter.application.port.in.RecommendUseCase;
+import online.bottler.letter.application.service.ArchiveLetterBoxService;
 import online.bottler.notification.application.port.NotificationUseCase;
+import online.bottler.recommendation.application.service.RecommendService;
 import online.bottler.slack.application.port.in.SlackUseCase;
 import online.bottler.slack.domain.SlackConstant;
 import online.bottler.user.application.command.SignUpCommand;
@@ -31,8 +31,8 @@ public class UserFacade {
     private final SlackUseCase slackUseCase;
     private final BanUseCase banUseCase;
     private final NotificationUseCase notificationUseCase;
-    private final RecommendUseCase recommendUseCase;
-    private final LetterBoxUseCase letterBoxUseCase;
+    private final RecommendService recommendService;
+    private final ArchiveLetterBoxService archiveLetterBoxService;
     private final LabelUseCase labelUseCase;
     private final PasswordEncoder passwordEncoder;
 
@@ -62,8 +62,8 @@ public class UserFacade {
         giveDefaultLabelsToNewUser(storedUser);
 
         List<Long> randomDevelopLetter = findRandomDevelopLetter();
-        recommendUseCase.saveDeveloperLetter(storedUser.getUserId(), randomDevelopLetter);
-        letterBoxUseCase.archiveLetters(randomDevelopLetter, storedUser.getUserId());
+        recommendService.saveDeveloperLetter(storedUser.getUserId(), randomDevelopLetter);
+        archiveLetterBoxService.archiveLetters(storedUser.getUserId(), randomDevelopLetter);
     }
 
     @Transactional

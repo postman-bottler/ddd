@@ -6,7 +6,7 @@ import static online.bottler.mapletter.application.DeleteLetterType.REPLY;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import online.bottler.global.exception.ApplicationException;
+import online.bottler.shared.exception.ApplicationException;
 import online.bottler.mapletter.application.command.CreateReplyMapLetterCommand;
 import online.bottler.mapletter.application.command.DeleteReplyMapLettersCommand;
 import online.bottler.mapletter.application.port.in.MapLetterReplyUseCase;

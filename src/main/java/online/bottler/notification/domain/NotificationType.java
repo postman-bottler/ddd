@@ -1,7 +1,7 @@
 package online.bottler.notification.domain;
 
 import lombok.Getter;
-import online.bottler.global.exception.DomainException;
+import online.bottler.shared.exception.DomainException;
 
 @Getter
 public enum NotificationType {

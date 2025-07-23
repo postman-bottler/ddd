@@ -1,7 +1,7 @@
 package online.bottler.complaint.domain;
 
 import lombok.Getter;
-import online.bottler.global.exception.DomainException;
+import online.bottler.shared.exception.DomainException;
 
 import java.time.LocalDateTime;
 

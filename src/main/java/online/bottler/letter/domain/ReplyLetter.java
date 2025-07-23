@@ -1,71 +1,104 @@
 package online.bottler.letter.domain;
 
-import java.time.LocalDateTime;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import online.bottler.letter.domain.event.ReplyLetterBlockedEvent;
+import online.bottler.shared.ddd.AggregateRoot;
+import online.bottler.letter.domain.exception.LetterAuthorMismatchException;
+import online.bottler.shared.event.DomainEventPublisher;
 
 @Getter
+@Entity
+@AggregateRoot
+@Table(
+        name = "reply_letters",
+        indexes = {
+                @Index(name = "idx_replyletter_receiverId_letterId_isDeleted", columnList = "receiverId, letterId, status"),
+                @Index(name = "idx_senderId_status", columnList = "senderId, status")
+        },
+        uniqueConstraints = @UniqueConstraint(name = "uq_letter_sender", columnNames = {"senderId", "letterId"})
+)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReplyLetter extends BaseLetter {
 
-    private final Long senderId;
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private final Long receiverId;
+    @Column(name = "sender_id", nullable = false)
+    private Long senderId;
 
-    private final Long letterId;
+    @Column(name = "receiver_id", nullable = false)
+    private Long receiverId;
 
+    @Column(name = "letter_id", nullable = false)
+    private Long letterId;
+
+    @Builder
     private ReplyLetter(
             Long id,
             Long senderId, Long receiverId,
             Long letterId,
             LetterContent letterContent,
-            LetterStatus status,
-            LocalDateTime createdAt
+            LetterStatus status
     ) {
-        super(id, letterContent, status, createdAt);
+        this.id = id;
         this.senderId = senderId;
         this.receiverId = receiverId;
         this.letterId = letterId;
+        this.letterContent = letterContent;
+        this.status = status;
     }
 
-    public static ReplyLetter of(
-            Long id,
+    public static ReplyLetter write(
             Long senderId, Long receiverId,
             Long letterId,
-            LetterContent letterContent,
-            LetterStatus status,
-            LocalDateTime createdAt
+            String title, String content, String font, String paper, String label
     ) {
-        return new ReplyLetter(id, senderId, receiverId, letterId, letterContent, status, createdAt);
-    }
-
-    public static ReplyLetter create(
-            Long senderId, Long receiverId,
-            Long letterId,
-            LetterContent letterContent,
-            String originalTitle
-    ) {
-        String formattedTitle = formatReplyTitle(originalTitle);
-
-        return new ReplyLetter(
-                null,
-                senderId, receiverId,
-                letterId,
-                LetterContent.of(
-                        formattedTitle,
-                        letterContent.content(),
-                        letterContent.font(),
-                        letterContent.paper(),
-                        letterContent.label()
-                ),
-                LetterStatus.OPEN,
-                null
-        );
+        return ReplyLetter.builder()
+                .senderId(senderId)
+                .receiverId(receiverId)
+                .letterId(letterId)
+                .letterContent(
+                        LetterContent.compose(formatReplyTitle(title), content, font, paper, label)
+                )
+                .status(LetterStatus.OPEN)
+                .build();
     }
 
     private static String formatReplyTitle(String title) {
         return "RE: [" + title + "]";
     }
 
-    public boolean isOwner(Long userId) {
-        return senderId.equals(userId);
+    public void delete(Long requesterId) {
+        validateOwner(requesterId);
+        this.status = LetterStatus.DELETED;
+    }
+
+    public void block() {
+        this.status = LetterStatus.BLOCKED;
+
+        DomainEventPublisher.publish(new ReplyLetterBlockedEvent(this.getSenderId()));
+    }
+
+    private void validateOwner(Long requesterId) {
+        if (!isOwner(requesterId)) {
+            throw new LetterAuthorMismatchException();
+        }
+    }
+
+    public boolean isOwner(Long requesterId) {
+        return senderId.equals(requesterId);
     }
 }

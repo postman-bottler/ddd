@@ -1,44 +1,77 @@
 package online.bottler.letter.domain;
 
-import java.time.LocalDateTime;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import java.util.List;
-import java.util.stream.Collectors;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
-public class LetterKeyword extends BaseDomain {
+@Entity
+@Table(name = "letter_keyword",
+        indexes = @Index(name = "idx_letterkeyword_keyword_status_letter", columnList = "keyword, status, letterId"),
+        uniqueConstraints = @UniqueConstraint(name = "uq_letter_keyword", columnNames = {"letterId", "keyword"}))
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class LetterKeyword extends AbstractAuditing {
 
-    private final Long letterId;
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private final String keyword;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "letter_id", nullable = false)
+    private Letter letter;
 
+    @Column(name = "keyword", nullable = false)
+    private String keyword;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
     private LetterStatus status;
 
-    private LetterKeyword(Long id, Long letterId, String keyword, LetterStatus status, LocalDateTime createdAt) {
-        super(id, createdAt);
-        this.letterId = letterId;
+    @Builder
+    private LetterKeyword(Long id, String keyword, LetterStatus status) {
+        this.id = id;
         this.keyword = keyword;
         this.status = status;
     }
 
-    public static LetterKeyword of(Long id, Long letterId, String keyword, LetterStatus status,
-                                   LocalDateTime createdAt) {
-        return new LetterKeyword(id, letterId, keyword, status, createdAt);
+    private static LetterKeyword create(String keyword) {
+        return LetterKeyword.builder()
+                .keyword(keyword)
+                .status(LetterStatus.OPEN)
+                .build();
     }
 
-    public static LetterKeyword create(Long letterId, String keyword) {
-        return new LetterKeyword(null, letterId, keyword, LetterStatus.OPEN, null);
+    static List<LetterKeyword> createAll(List<String> keywords) {
+        return keywords.stream()
+                .map(LetterKeyword::create)
+                .toList();
     }
 
-    public static List<LetterKeyword> createList(Long letterId, List<String> keywords) {
-        return keywords.stream().map(keyword -> create(letterId, keyword)).collect(Collectors.toList());
+    void changeLetter(Letter letter) {
+        this.letter = letter;
+    }
+
+    void delete() {
+        this.status = LetterStatus.DELETED;
     }
 
     public void block() {
         this.status = LetterStatus.BLOCKED;
-    }
-
-    public void delete() {
-        this.status = LetterStatus.DELETED;
     }
 }

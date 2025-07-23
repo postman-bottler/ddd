@@ -2,7 +2,7 @@ package online.bottler.label.application;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import online.bottler.global.exception.ApplicationException;
+import online.bottler.shared.exception.ApplicationException;
 import online.bottler.label.application.command.LabelCommand;
 import online.bottler.label.application.port.in.LabelUseCase;
 import online.bottler.label.application.response.LabelResponse;

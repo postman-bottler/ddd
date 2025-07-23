@@ -7,7 +7,7 @@ import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import online.bottler.global.exception.AdaptorException;
+import online.bottler.shared.exception.AdaptorException;
 import online.bottler.notification.application.port.PushNotificationPort;
 import online.bottler.notification.domain.PushMessages;
 import org.springframework.data.redis.core.RedisTemplate;

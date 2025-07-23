@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import online.bottler.global.exception.ApplicationException;
+import online.bottler.shared.exception.ApplicationException;
 import online.bottler.mapletter.application.command.DeleteArchivedLettersCommand;
 import online.bottler.mapletter.application.dto.FindAllArchiveLettersDTO;
 import online.bottler.mapletter.application.port.in.MapLetterArchiveUseCase;

@@ -4,18 +4,21 @@ import static online.bottler.letter.domain.LetterType.REPLY_LETTER;
 import static online.bottler.notification.domain.NotificationType.KEYWORD_REPLY;
 
 import lombok.RequiredArgsConstructor;
+import online.bottler.letter.application.command.CommonPageCommand;
+import online.bottler.letter.application.command.RemoveLetterBoxCommand;
 import online.bottler.letter.application.command.ReplyLetterCommand;
 import online.bottler.letter.application.command.ReplyLetterDeleteCommand;
 import online.bottler.letter.application.command.ReplyLetterSummariesQuery;
-import online.bottler.letter.application.port.in.LetterBoxUseCase;
-import online.bottler.letter.application.port.in.RecentReplyForLetterUseCase;
-import online.bottler.letter.application.port.in.ReplyLetterUseCase;
-import online.bottler.letter.application.response.ReplyLetterDetailResponse;
-import online.bottler.letter.application.response.ReplyLetterResponse;
-import online.bottler.letter.application.response.ReplyLetterSummaryResponse;
+import online.bottler.letter.application.dto.ReplyLetterDetailInfo;
+import online.bottler.letter.application.dto.ReplyLetterInfo;
+import online.bottler.letter.application.dto.ReplyLetterSummaryInfo;
+import online.bottler.letter.application.service.LetterBoxService;
+import online.bottler.letter.application.service.RecentReplyForLetterService;
+import online.bottler.letter.application.service.ReplyLetterService;
 import online.bottler.letter.domain.LetterBoxType;
 import online.bottler.letter.domain.ReplyLetter;
 import online.bottler.notification.application.NotificationService;
+import online.bottler.shared.security.AuthenticationProvider;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,46 +27,58 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ReplyLetterFacade {
 
-    private final ReplyLetterUseCase replyLetterUseCase;
+    private final ReplyLetterService replyLetterService;
     private final NotificationService notificationService;
-    private final LetterBoxUseCase letterBoxUseCase;
-    private final RecentReplyForLetterUseCase recentReplyForLetterUseCase;
+    private final LetterBoxService letterBoxService;
+    private final RecentReplyForLetterService recentReplyForLetterService;
+    private final AuthenticationProvider authenticationProvider;
 
     @Transactional
-    public ReplyLetterResponse write(ReplyLetterCommand replyLetterCommand) {
-        ReplyLetter replyLetter = replyLetterUseCase.write(replyLetterCommand);
+    public ReplyLetterInfo write(ReplyLetterCommand replyLetterCommand) {
+        Long userId = authenticationProvider.getCurrentUserId();
 
-        letterBoxUseCase.archiveLetter(replyLetter);
+        ReplyLetter replyLetter = replyLetterService.write(userId, replyLetterCommand);
 
-        recentReplyForLetterUseCase.push(replyLetter.getReceiverId(), replyLetter.getId(), replyLetter.getLabel());
+        letterBoxService.archiveLetter(replyLetter);
 
+        recentReplyForLetterService.push(replyLetter.getReceiverId(), replyLetter.getId(), replyLetter.getLabel());
+
+        // 이벤트발행
         notificationService.sendLetterNotification(KEYWORD_REPLY, replyLetter.getReceiverId(), replyLetter.getId(),
                 replyLetter.getLabel());
 
-        return ReplyLetterResponse.from(replyLetter);
+        return ReplyLetterInfo.from(replyLetter);
     }
 
     @Transactional(readOnly = true)
-    public Page<ReplyLetterSummaryResponse> getSummaries(ReplyLetterSummariesQuery replyLetterSummariesQuery) {
-        return replyLetterUseCase.getPagedReplyLetters(replyLetterSummariesQuery).map(ReplyLetterSummaryResponse::from);
+    public Page<ReplyLetterSummaryInfo> getSummaries(Long letterId, CommonPageCommand command) {
+        Long userId = authenticationProvider.getCurrentUserId();
+        return replyLetterService.getPagedReplyLetters(userId, ReplyLetterSummariesQuery.of(letterId, command)).map(ReplyLetterSummaryInfo::from);
     }
 
     @Transactional(readOnly = true)
-    public ReplyLetterDetailResponse getDetail(Long id, Long userId) {
-        ReplyLetter replyLetter = replyLetterUseCase.getReplyLetter(userId, id);
+    public ReplyLetterDetailInfo getDetail(Long id) {
+        Long userId = authenticationProvider.getCurrentUserId();
 
-        boolean isReplied = replyLetterUseCase.isReplied(userId, id);
+        ReplyLetter replyLetter = replyLetterService.getReplyLetter(userId, id);
 
-        return ReplyLetterDetailResponse.from(replyLetter, isReplied);
+        boolean isReplied = replyLetterService.isReplied(userId, id);
+
+        return ReplyLetterDetailInfo.from(replyLetter, isReplied);
     }
 
     @Transactional
-    public void delete(ReplyLetterDeleteCommand replyLetterDeleteCommand) {
-        ReplyLetter replyLetter = replyLetterUseCase.removeReplyLetter(replyLetterDeleteCommand);
+    public void delete(ReplyLetterDeleteCommand command) {
+        Long userId = authenticationProvider.getCurrentUserId();
 
-        letterBoxUseCase.removeLetterFromBox(replyLetterDeleteCommand.id(), LetterBoxType.of(REPLY_LETTER,
-                replyLetterDeleteCommand.boxType()));
+        ReplyLetter replyLetter = replyLetterService.getReplyLetter(userId, command.id());
 
-        recentReplyForLetterUseCase.delete(replyLetter.getReceiverId(), replyLetter.getId(), replyLetter.getLabel());
+        replyLetterService.removeReplyLetter(userId, command);
+
+        letterBoxService.removeLettersFromBox(
+                RemoveLetterBoxCommand.byLetterId(command.id(), LetterBoxType.of(REPLY_LETTER, command.boxType()))
+        );
+
+        recentReplyForLetterService.delete(replyLetter.getReceiverId(), replyLetter.getId(), replyLetter.getLabel());
     }
 }

@@ -5,13 +5,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import online.bottler.auth.CustomUserDetails;
-import online.bottler.global.response.ApiResponse;
 import online.bottler.notification.application.response.NotificationResponse;
 import online.bottler.notification.application.response.SubscriptionResponse;
 import online.bottler.notification.application.response.UnreadNotificationResponse;
 import online.bottler.notification.application.port.NotificationUseCase;
 import online.bottler.notification.application.port.SubscriptionUseCase;
 import online.bottler.notification.domain.NotificationType;
+import online.bottler.shared.response.ApiResponse;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 

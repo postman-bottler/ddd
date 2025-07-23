@@ -8,7 +8,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import online.bottler.auth.JwtTokenProvider;
-import online.bottler.global.exception.ApplicationException;
+import online.bottler.shared.exception.ApplicationException;
 import online.bottler.user.application.command.AuthEmailCommand;
 import online.bottler.user.application.command.ChangePasswordCommand;
 import online.bottler.user.application.command.CheckDuplicateNicknameCommand;

@@ -2,7 +2,7 @@ package online.bottler.mapletter.adaptor.out.persistence.repository;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import online.bottler.global.exception.AdaptorException;
+import online.bottler.shared.exception.AdaptorException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 

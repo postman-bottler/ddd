@@ -1,22 +1,18 @@
 package online.bottler.letter.application.service;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
-import online.bottler.letter.application.port.in.KeywordUseCase;
-import online.bottler.letter.application.port.out.KeywordPersistencePort;
-import online.bottler.letter.domain.Keyword;
-import org.springframework.stereotype.Service;
+import online.bottler.letter.application.dto.KeywordInfo;
+import online.bottler.shared.ddd.ApplicationService;
+import online.bottler.letter.domain.repository.KeywordJpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
+@ApplicationService
 @RequiredArgsConstructor
-public class KeywordService implements KeywordUseCase {
+@Transactional(readOnly = true)
+public class KeywordService {
+    private final KeywordJpaRepository keywordRepository;
 
-    private final KeywordPersistencePort keywordPersistencePort;
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<Keyword> getKeywords() {
-        return keywordPersistencePort.loadAll();
+    public KeywordInfo getKeywords() {
+        return KeywordInfo.from(keywordRepository.findAll());
     }
 }
