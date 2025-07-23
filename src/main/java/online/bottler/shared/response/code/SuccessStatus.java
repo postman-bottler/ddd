@@ -1,4 +1,4 @@
-package online.bottler.global.response.code;
+package online.bottler.shared.response.code;
 
 import org.springframework.http.HttpStatus;
 
